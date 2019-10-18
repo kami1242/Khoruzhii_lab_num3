@@ -1,16 +1,50 @@
 # Хоружий Кирилл
-# Игра: "Поймай шарик" -- V1
+# Игра: "Поймай шарик" -- V2
 # 18.10.2019
 
 from tkinter import *
 from random import randrange as rnd
 import numpy as np
 
+f = open('Score table.txt', 'w')
+
 # Оформление полотна:
 root = Tk()
 root.geometry('800x600')
 canv = Canvas(root, bg='#000099')
 canv.pack(fill=BOTH, expand=1)
+
+# Добавление пользователя:
+empty_name = 'ВВЕДИТЕ ИМЯ'
+name = empty_name
+ent = Entry(width=20)
+but_ent = Button(text="Сменить пользователя")
+but_save = Button(text="Save")
+ent.pack(side=RIGHT)
+but_ent.pack(side=RIGHT)
+but_save.pack(side=LEFT)
+
+
+def Add_user(event):
+    global name
+    if ent.get():
+        name = ent.get()
+    else:
+        name = empty_name
+        print(name)
+
+
+def Save(event):
+    global score
+    f.write(name + " " + str(score) + "\n")
+    new_ball()
+    score = 0
+    lvl = 0
+    r[N - 1] = 30
+
+
+but_ent.bind('<Button-1>', Add_user)
+but_save.bind('<Button-1>', Save)
 
 # Задаём цвета шариков и их количество (N <= len(colors)):
 N = 9
@@ -128,8 +162,9 @@ update()
 
 # Обновление счёта игрока
 def tick():
-    label.config(text="Score = " + str(score),
-                 font='Courier 20')
+    label.config(
+        text="User: " + name + ", score = " + str(score),
+        font='Courier 20')
     label.after(200, tick)
 
 
